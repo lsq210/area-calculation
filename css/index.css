@@ -1,0 +1,88 @@
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+}
+
+.map-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.footer-bar {
+  width: 80vw;
+  height: 80px;
+  position: fixed;
+  left: 10vw;
+  bottom: 50px;
+  z-index: 1;
+  /* background-color: teal; */
+}
+
+.calculation-box {
+  height: 75px;
+  width: 150px;
+  position: fixed;
+  top: 40px;
+  left: 6vw;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  text-align: center;
+  border-radius: 6px;
+}
+
+p {
+  font-family: 'Open Sans';
+  font-size: 13px;
+}
+
+.el-tag+.el-tag {
+  margin-left: 10px;
+}
+
+.button-new-tag {
+  margin-left: 10px;
+  height: 32px;
+  line-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.input-new-tag {
+  width: 110px;
+  margin-left: 10px;
+  vertical-align: bottom;
+}
+
+.operation {
+  display: flex;
+  margin-top: 10px;
+}
+
+.map-style-container {
+  width: 30vw;
+  height: 32px;
+  position: fixed;
+  left: 8vw;
+  top: 20px;
+  z-index: 1;
+  display: flex;
+}
+
+.position-wrap {
+  display: flex;
+  margin-left: 10px;
+  max-width: calc(80vw - 134px - 110px - 10px);
+  overflow-x: auto;
+}
+
+.tags {
+  display: flex;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
