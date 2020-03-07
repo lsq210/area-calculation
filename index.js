@@ -1,13 +1,31 @@
 const mapboxToken = 'pk.eyJ1IjoiY3N0YW8iLCJhIjoiY2p1eThkYjgzMHNvbzQ0cnhqd3c3OTU1biJ9.vT96vIXE74LTVV4xXrv0Zw';
 const drawId = 'calculate-polygon';
 // 经度整数部分为0~180，小数部分0~4；纬度整数部分为0~90，小数部分0~4
-const lngPattern = /^[\-\+]?(((\d|[1-9]\d|1[1-7]\d|0)\.\d{0,4})|(\d|[1-9]\d|1[1-7]\d|0{1,3})|180\.0{0,4}|180)$/;
-const latPattern = /^[\-\+]?([0-8]?\d{1}\.\d{0,4}|90\.0{0,4}|[0-8]?\d{1}|90)$/;
+const lngPattern = /^[\-\+]?(((\d|[1-9]\d|1[1-7]\d|0)\.\d{0,3})|(\d|[1-9]\d|1[1-7]\d|0{1,3})|180\.0{0,3}|180)$/;
+const latPattern = /^[\-\+]?([0-8]?\d{1}\.\d{0,3}|90\.0{0,3}|[0-8]?\d{1}|90)$/;
 
 new Vue({
   el: '#app',
   data: {
     positions: [],
+    rawArea: null,
+    inputVisible: false,
+    inputValue: '',
+    loading: false,
+    mapOptions: {
+      map: null,
+      draw: null
+    },
+    unitList: [{
+      value: 0,
+      label: 'm² (平方米)'
+    },{
+      value: 1,
+      label: 'ha (公顷)'
+    },{
+      value: 2,
+      label: 'mu (亩)'
+    }],
     unit: 0,
     mapList: [{
       value: 'mapbox://styles/mapbox/satellite-v9',
@@ -23,11 +41,11 @@ new Vue({
       if (this.rawArea){
         switch (this.unit) {
           case 0:
-            return this.rawArea * 9101160000.085981;
+            return this.rawArea;
           case 1:
-            return this.rawArea * 9101160000.085981 * 0.0001;
+            return this.rawArea * 0.0001;
           case 2:
-            return this.rawArea * 9101160000.085981 * 0.0015;
+            return this.rawArea * 0.0015;
           default:
             return null;
         }
@@ -67,7 +85,8 @@ new Vue({
           geometry: { type: 'Polygon', coordinates: [
             [...this.positions.map(p => [p.lng, p.lat]), [this.positions[0].lng, this.positions[0].lat]]
           ] }
-        })
+        });
+        this.rawArea = Math.round(turf.area(this.mapOptions.draw.getAll()) * 100) / 100;
       }
     },
     mapStyle: function () {
@@ -102,9 +121,10 @@ new Vue({
               center: [this.positions[0].lng, this.positions[0].lat]
             });
           } else {
-            let bbox = this.positions.map(p => [p.lng, p.lat]);
+            let line = turf.lineString(this.positions.map(p => [p.lng, p.lat]));
+            let bbox = turf.bbox(line)
             this.mapOptions.map.fitBounds(bbox, {
-              padding: {top: 80, bottom:80, left: 50, right: 50}
+              padding: {top: 100, bottom:100, left: 50, right: 50}
             });
           }
         } else {
@@ -124,29 +144,6 @@ new Vue({
     welcome() {
       this.$alert('你可以使用绘图工具来画一个多边形，也可以按顺时针或逆时针输入一组坐标，点击计算即可得到这个多边形的面积😋',
        '地理多边形面积计算');
-    },
-    calculate() {
-      let xmldata = `
-      <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" 
-        xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
-        <SOAP-ENV:Header/>
-        <S:Body>
-          <ns2:polygon_area xmlns:ns2="http://calculator.me.org/">
-            <locations>${this.positions.map(p => p.lng + ',' + p.lat).join(' ')}</locations>
-          </ns2:polygon_area>
-        </S:Body>
-      </S:Envelope>`;
-      let matchReg = /(?<=<return>).*?(?=<\/return>)/;
-      axios({
-        method: 'post',
-        url: '/CalculatorWS/CalculatorWS?wsdl',
-        data: xmldata,
-        headers: {'Content-Type': 'text/xml'}
-      }).then(res => {
-        this.rawArea =  res.data.match(matchReg)[0];
-      }).catch(error => {
-        this.$notify(error)
-      });
     },
     initMap() {
       mapboxgl.accessToken = mapboxToken;
@@ -174,14 +171,26 @@ new Vue({
       if (featureNum === 0) {
         this.positions = [];
       } else if (featureNum === 1) {
-        // area = Math.round(turf.area(this.mapOptions.draw.getAll()) * 100) / 100;
-        let temp = this.mapOptions.draw
-        .getAll()
-        .features[0]
-        .geometry
-        .coordinates[0]
-        if (temp) {
-          this.positions = temp.map(p => ({lng: p[0], lat: p[1]})).filter((_, i) => temp.length - 1 != i);
+        if(this.mapOptions.draw.getAll().features.length) {
+          let geometry = this.mapOptions.draw.getAll().features[0].geometry
+          switch(geometry.type) {
+            case 'Point':
+              this.positions = [{lng: geometry.coordinates[0], lat: geometry.coordinates[1]}];
+              break;
+            case 'LineString':
+              this.positions = geometry.coordinates.map(p => ({lng: p[0], lat: p[1]}));
+              break;
+            case 'Polygon':
+              if(geometry.coordinates.length) {
+                let temp = geometry.coordinates[0];
+                this.positions = temp.map(p => ({lng: p[0], lat: p[1]})).filter((_, i) => temp.length - 1 != i);
+              } else {
+                this.positions = [];
+              }
+              break;
+            default:
+              break;
+          }
         } else {
           this.positions = [];
         }
