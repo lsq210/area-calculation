@@ -1,8 +1,8 @@
 const mapboxToken = 'pk.eyJ1IjoiY3N0YW8iLCJhIjoiY2p1eThkYjgzMHNvbzQ0cnhqd3c3OTU1biJ9.vT96vIXE74LTVV4xXrv0Zw';
 const drawId = 'calculate-polygon';
 // 经度整数部分为0~180，小数部分0~4；纬度整数部分为0~90，小数部分0~4
-const lngPattern = /^[\-\+]?(((\d|[1-9]\d|1[1-7]\d|0)\.\d{0,3})|(\d|[1-9]\d|1[1-7]\d|0{1,3})|180\.0{0,3}|180)$/;
-const latPattern = /^[\-\+]?([0-8]?\d{1}\.\d{0,3}|90\.0{0,3}|[0-8]?\d{1}|90)$/;
+const lngPattern = /^[\-\+]?(((\d|[1-9]\d|1[1-7]\d|0)\.\d{0,10})|(\d|[1-9]\d|1[1-7]\d|0{1,3})|180\.0{0,10}|180)$/;
+const latPattern = /^[\-\+]?([0-8]?\d{1}\.\d{0,10}|90\.0{0,10}|[0-8]?\d{1}|90)$/;
 
 new Vue({
   el: '#app',
