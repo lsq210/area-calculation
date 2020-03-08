@@ -23,9 +23,9 @@ and open the template in the editor.
       <div id="map" style="width: 100vw; height: 100vh"></div>
     </div>
     <div class="map-style-container">
-      <el-tag>Map Source</el-tag>
+      <el-tag style="font-size: 14px;">Map Source</el-tag>
       <el-select v-model="mapStyle" filterable allow-create default-first-option placeholder="Change a map's style"
-        size="small" style="width: 20vw">
+        size="small" style="width: 20vw; min-width: 200px;">
         <el-option v-for="item in mapList" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>

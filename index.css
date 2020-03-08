@@ -17,19 +17,6 @@ body {
   left: 10vw;
   bottom: 50px;
   z-index: 1;
-  /* background-color: teal; */
-}
-
-.calculation-box {
-  height: 75px;
-  width: 150px;
-  position: fixed;
-  top: 40px;
-  left: 6vw;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 15px;
-  text-align: center;
-  border-radius: 6px;
 }
 
 p {
@@ -61,7 +48,6 @@ p {
 }
 
 .map-style-container {
-  width: 30vw;
   height: 32px;
   position: fixed;
   left: 8vw;
@@ -85,4 +71,9 @@ p {
 ::-webkit-scrollbar {
   width: 2px;
   height: 2px;
+}
+
+.el-message-box {
+  max-width: 420px;
+  width: 100vw;
 }
