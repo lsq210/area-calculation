@@ -3,6 +3,7 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
+  font-family: Bitter, 'Lantinghei SC', 'Microsoft YaHei', sans-serif;
 }
 
 .map-container {
@@ -17,11 +18,6 @@ body {
   left: 10vw;
   bottom: 50px;
   z-index: 1;
-}
-
-p {
-  font-family: 'Open Sans';
-  font-size: 13px;
 }
 
 .el-tag+.el-tag {
@@ -48,6 +44,7 @@ p {
 }
 
 .map-style-container {
+  width: 350px;
   height: 32px;
   position: fixed;
   left: 8vw;

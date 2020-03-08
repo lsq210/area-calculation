@@ -23,16 +23,16 @@ and open the template in the editor.
       <div id="map" style="width: 100vw; height: 100vh"></div>
     </div>
     <div class="map-style-container">
-      <el-tag style="font-size: 14px;">Map Source</el-tag>
+      <el-tag>Map Source</el-tag>
       <el-select v-model="mapStyle" filterable allow-create default-first-option placeholder="Change a map's style"
-        size="small" style="width: 20vw; min-width: 200px;">
+        size="small" style="width: 100%">
         <el-option v-for="item in mapList" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
     </div>
     <div class="footer-bar">
       <div class="tags">
-        <el-tag style="width: 134px; font-size: 14px;">Selected position(s)</el-tag>
+        <el-tag style="width: 134px;">Selected position(s)</el-tag>
         <div class=" position-wrap">
           <el-tag v-for="(tag, index) in positions" :key="`positions-${index}`" closable :disable-transitions="false"
             @close="handleClose(tag)">
@@ -46,7 +46,7 @@ and open the template in the editor.
         </el-tag>
       </div>
       <div class="operation">
-        <el-tag type="success" style="height:40px; font-size: 14px; padding: 4px 27.7px;">Polygon Area</el-tag>
+        <el-tag type="success" style="height:40px; padding: 4px 27.7px;">Polygon Area</el-tag>
         <el-input v-model="area" readonly></el-input>
         <el-select v-model="unit">
           <el-option v-for="item in unitList" :key="item.value" :label="item.label" :value="item.value">
