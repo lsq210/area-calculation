@@ -36,7 +36,7 @@ and open the template in the editor.
         <div class=" position-wrap">
           <el-tag v-for="(tag, index) in positions" :key="`positions-${index}`" closable :disable-transitions="false"
             @close="handleClose(tag)">
-            {{`${Math.round(tag.lng * 100) /100},${Math.round(tag.lat * 100) /100}`}}
+            {{`${Math.round(tag.lng * 10000) /10000},${Math.round(tag.lat * 10000) /10000}`}}
           </el-tag>
         </div>
         <el-input class="input-new-tag" v-if="inputVisible" v-model="inputValue" ref="saveTagInput" size="small"
